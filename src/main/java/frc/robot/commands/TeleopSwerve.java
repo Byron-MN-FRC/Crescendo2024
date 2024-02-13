@@ -1,14 +1,13 @@
 package frc.robot.commands;
 
-import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.Swerve;
 
 
 public class TeleopSwerve extends Command {    
@@ -26,6 +25,16 @@ public class TeleopSwerve extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
+    }
+
+    @Override
+    public void initialize() {
+        s_Swerve.startMonitoring();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        s_Swerve.stopMonitoring();
     }
 
     @Override
