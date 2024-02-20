@@ -50,9 +50,6 @@ public class Robot extends TimedRobot {
 
         // Record both DS control and joystick data
         DriverStation.startDataLog(DataLogManager.getLog());
-
-        // (alternatively) Record only DS control data
-        DriverStation.startDataLog(DataLogManager.getLog(), false);
     }
 
     /**

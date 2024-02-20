@@ -17,6 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -31,14 +34,38 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private AnalogOutput hourGlAnalog = new AnalogOutput(0);
-    
 
+
+    private final StructArrayPublisher<SwerveModuleState> swervePublisher;
+    private final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose2d.struct).publish();
+    private final Field2d m_field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
+        // Start publishing an array of module states with the "/SwerveStates" key
+        swervePublisher = NetworkTableInstance.getDefault()
+          .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+
+          //Testing this out for Swerve AdvantageScope
+          SwerveModuleState[] states = new SwerveModuleState[] {
+            new SwerveModuleState(),
+            new SwerveModuleState(),
+            new SwerveModuleState(),
+            new SwerveModuleState()
+        };
         
+        // WPILib
+        StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault()
+            .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
+        
+        periodic(); {
+            publisher.set(states);
+    
+    // Do this in either robot periodic or subsystem periodic
+    m_field.setRobotPose(swerveOdometry.getPoseMeters());
+        }
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -168,6 +195,9 @@ public class Swerve extends SubsystemBase {
         }
         // SmartDashboard.putData(gyro);
         RobotContainer.getInstance().field.setRobotPose(getPose());
+         // Periodically send a set of module states
+        swervePublisher.set(getModuleStates());
+        posePublisher.set(getPose());
         
     }
 
