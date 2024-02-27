@@ -12,6 +12,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -55,6 +56,8 @@ public class Robot extends TimedRobot {
         enableLiveWindowInTest(true);
 
         ph.enableCompressorAnalog(100,120);
+
+        CameraServer.startAutomaticCapture("flapjack", 0);
 
         // Starts recording to data log
         DataLogManager.start();

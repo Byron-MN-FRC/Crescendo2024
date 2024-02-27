@@ -296,4 +296,14 @@ noteDetectorSpampTop = new DigitalInput(3);
         topLeft.set(topLeftSpeed / Constants.MaxRPMConstants.maxRPMVortex);
         topRight.set(topRightSpeed / Constants.MaxRPMConstants.maxRPMVortex);
     }
+
+    public void speakerAutonShoot() {
+        if(topRight.getEncoder().getVelocity() > Constants.SpampConstants.speakerRPM) {
+            //TODO: Change to account for PID, change line above ^
+            bottomLeft.set(1);
+            midLeft.set(1);
+            topLeft.set(topLeftSpeed / Constants.MaxRPMConstants.maxRPMVortex);
+            topRight.set(topRightSpeed / Constants.MaxRPMConstants.maxRPMVortex);
+        }
+    }
 }

@@ -5,17 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Spamp;
 
 public class autonAmp extends Command {
-  /** Creates a new autonAmp. */
-  public autonAmp() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final Spamp m_spamp;
+ 
+
+ /** Creates a new autonAmp. */
+  public autonAmp(Spamp subsystem) {
+      m_spamp = subsystem;
+      addRequirements(m_spamp);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("!!FIRE INTO AMP!!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
