@@ -127,13 +127,7 @@ public final class Constants {
            public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
-        //      public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-        //   new PIDConstants(5.0, 0, 0), // Translation constants 
-        //   new PIDConstants(5.0, 0, 0), // Rotation constants 
-        //   maxSpeed,
-        //   Units.inchesToMeters(35/2), //flModuleOffset.getNorm(), // Drive base radius (distance from center to furthest module) 
-        //   new ReplanningConfig()
-        // ); commented out bc it's in swerve subsystem, can be changed to stay here
+
     }
 
     public static final class AutoConstants {
