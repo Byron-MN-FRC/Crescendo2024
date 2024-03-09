@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 
 import java.util.function.BooleanSupplier;
@@ -34,6 +35,12 @@ public class TeleopSwerve extends Command {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
+        double speedAdjustment = 1.0- RobotContainer.getInstance().driver.getHID().getLeftTriggerAxis();
+        translationVal = translationVal*speedAdjustment;
+        rotationVal = rotationVal*speedAdjustment;
+        strafeVal = strafeVal*speedAdjustment;
+
+         System.out.println("adjustment=" +speedAdjustment + " translational=" +translationVal + "rotational=" +rotationVal + "strafe=" +strafeVal);
 
         /* Drive */
         s_Swerve.drive(
