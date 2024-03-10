@@ -80,7 +80,7 @@ public class RobotContainer {
   /* Controllers */
 
   public final CommandXboxController driver = new CommandXboxController(0);
-  private final CommandXboxController accessory = new CommandXboxController(1);
+  public final CommandXboxController accessory = new CommandXboxController(1);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
