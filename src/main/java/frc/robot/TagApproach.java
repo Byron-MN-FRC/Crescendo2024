@@ -18,15 +18,17 @@ public class TagApproach {
     private Alliance _alliance;
     private gameTarget _targetType;
     private Pose2d _desiredPose;
+    private double _limelightCrosshairOffset;
     
     public TagApproach(int id, double tagOffsetX, double tagOffsetY, Alliance alliance, gameTarget targetType, 
-        Pose2d desiredPose) {
+        Pose2d desiredPose, double limelightCrosshairOffset) {
         _fiduciaryNumber = id;
         _offset_X = tagOffsetX;
         _offset_y = tagOffsetY;
         _alliance = alliance;
         _targetType = targetType;
         _desiredPose = desiredPose;
+        _limelightCrosshairOffset = limelightCrosshairOffset;
     }
 
     public int FiduciaryNumber(){
@@ -55,5 +57,9 @@ public class TagApproach {
     
     public Pose2d DesiredPos(){
         return _desiredPose;
+    }
+
+    public double LimelightCrosshairOffset(){
+        return _limelightCrosshairOffset;
     }
 }

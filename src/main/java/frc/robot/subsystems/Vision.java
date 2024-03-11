@@ -29,7 +29,7 @@ public class Vision extends SubsystemBase {
     private static final Vision m_Vision = new Vision();
 
     // PID values and supporting storage for turning towards targets
-    private double _turnkp = .0075;
+    private double _turnkp = .0065;
     private double _turnki = 0.0;
     private double _turnkd = 0;
 
