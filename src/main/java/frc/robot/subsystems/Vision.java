@@ -7,14 +7,19 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 import frc.robot.TagApproaches;
 
 public class Vision extends SubsystemBase {
@@ -27,8 +32,16 @@ public class Vision extends SubsystemBase {
     private double _turnkp = .0075;
     private double _turnki = 0.0;
     private double _turnkd = 0;
+
+    private double _rotkp = .0075;
+    private double _rotki = 0.0;
+    private double _rotkd = 0;
+
     private PIDController _turnToTargetPID = new PIDController(_turnkp, _turnki, _turnkd);
+    private PIDController _rotateToTargetPID = new PIDController(_rotkp, _rotki, _rotkd);
     private double turnPower = 0;
+    private double rotPower = 0;
+
 
     private String _limelightName = "limelight-cybears";
 
@@ -44,6 +57,7 @@ public class Vision extends SubsystemBase {
 
         // Set tolerance to 2 degrees
         _turnToTargetPID.setTolerance(2);
+        _rotateToTargetPID.setTolerance(2);
     }
 
     private Pose2d currentOptimalPose;
@@ -93,8 +107,13 @@ public class Vision extends SubsystemBase {
         /// other calculations for PID turning to target may be appropriate here as
         /// well.
         turnPower = _turnToTargetPID.calculate(LimelightHelpers.getTX(_limelightName), 0);
+        rotPower = _rotateToTargetPID.calculate(Units.radiansToDegrees(LimelightHelpers.getBotPose3d_TargetSpace(_limelightName).getRotation().getY()),0);
+        SmartDashboard.putNumber("Target Rotation", Units.radiansToDegrees(LimelightHelpers.getBotPose3d_TargetSpace(_limelightName).getRotation().getY()));
         if (_turnToTargetPID.atSetpoint())
             turnPower = 0;
+        
+        if (_rotateToTargetPID.atSetpoint())
+            rotPower = 0;
     }
 
     public Pose2d GetTargetPose() {
@@ -103,7 +122,7 @@ public class Vision extends SubsystemBase {
 
     public void UpdatePoseEstimatorWithVisionBotPose(SwerveDrivePoseEstimator swervePoseEstimator) {
         LimelightHelpers.PoseEstimate estimatedPose = LimelightHelpers.getBotPoseEstimate_wpiBlue(_limelightName);
-
+ 
         if (estimatedPose.pose.getX() == 0.0) {
             return;
         }
@@ -112,28 +131,34 @@ public class Vision extends SubsystemBase {
 
         if ((fidID >= 0) && (fidID <= 15)) {
             Pose2d pose = _tagApproches.TagFieldPose2d(fidID);
+
+            // calculating distance from robot to target
             Translation2d trans1 = new Translation2d(estimatedPose.pose.getX(), estimatedPose.pose.getY());
             Translation2d trans2 = new Translation2d(pose.getX(), pose.getY());
             double poseDifference = trans1.getDistance(trans2);
 
+            // take the estimated robot pose and add PI radians to say the camera is on the back of the robot.
             Pose2d robotPose  = new Pose2d(
                 estimatedPose.pose.getX(),
                 estimatedPose.pose.getY(),
                 new Rotation2d(estimatedPose.pose.getRotation().getRadians() + Math.PI)
             );
-
+            // offset from cameral to middle of robot
+            robotPose = robotPose.transformBy(new Transform2d(new Translation2d(Units.inchesToMeters(10.5),0),new Rotation2d()));
+       
+            SmartDashboard.putString("robotPose", robotPose.toString());
+ 
             getVisionCalculatedRobotPose = robotPose;    
 
-            SmartDashboard.putNumber("Distance", poseDifference);
+            SmartDashboard.putNumber("driver/Distance", poseDifference);
 
             if (poseDifference < 1.5) {
-                // swervePoseEstimator.setVisionMeasurementStdDevs(
-                // VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-
                 if (swervePoseEstimator != null) {
                     swervePoseEstimator.addVisionMeasurement(robotPose,
                             Timer.getFPGATimestamp() - estimatedPose.latency);
-                }
+                    
+               }
+               RobotContainer.getInstance().s_Swerve.setPose(robotPose);
             }
         }
     }
@@ -165,5 +190,9 @@ public class Vision extends SubsystemBase {
 
     public double GetTargetTurnPower() {
         return turnPower;
+    }
+
+    public double GetTargetRotPower() {
+        return -rotPower;
     }
 }

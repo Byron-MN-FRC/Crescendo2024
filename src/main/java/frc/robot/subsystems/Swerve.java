@@ -7,6 +7,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,6 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,7 +33,15 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
     private AnalogOutput hourGlAnalog = new AnalogOutput(0);
     public boolean invert;
+
+    /* Standard deviation of model states.  Increase these numbers to trust your mode's state estimates less.  This 
+     * matrix is in the form [x, y, theta], with units in meters and radians, then meters.
+     */
+    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)) ;
     
+    /* Standard deviation of vision measurements.  Increase these numbers to trust global measurements from vision less.  This 
+     * matrix is in the form [x, y, theta], with units in meters and radians.
+     */   private static final Vector<N3> addVisionMeasurementStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(10)) ;
 
 
     public Swerve() {
@@ -45,7 +56,9 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
-        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), new Pose2d());
+
+           
+        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), new Pose2d(), stateStdDevs, addVisionMeasurementStdDevs);
 
         //configure auto builder
         AutoBuilder.configureHolonomic(
@@ -167,12 +180,13 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swervePoseEstimator.update(getGyroYaw(), getModulePositions());
         Vision.getInstance().UpdatePoseEstimatorWithVisionBotPose(swervePoseEstimator);
+        swervePoseEstimator.update(getGyroYaw(), getModulePositions());
         // for(SwerveModule mod : mSwerveMods){
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+        //      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+        //      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+        //      SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         // }
-        // SmartDashboard.putData(gyro);
+        SmartDashboard.putData(gyro);
         RobotContainer.getInstance().field.setRobotPose(getPose());
         
         SmartDashboard.putString("Robot Position", String.format("x:%.2f, y:%.2f, rotation: %.2f degrees", 

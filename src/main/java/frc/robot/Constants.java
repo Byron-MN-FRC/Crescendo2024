@@ -5,7 +5,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -96,7 +99,7 @@ public final class Constants {
             // Bezels left
             //public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-78.22);
             // Bezels right
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(103.01);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(104.15);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -109,7 +112,7 @@ public final class Constants {
             // Bezels left
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-174.46); 
             // Bezels right
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(8.96); 
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(4.04); 
              public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -122,7 +125,7 @@ public final class Constants {
             // Bezels left
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.98);
             // Bezels right
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-144.31);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-147.13);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -135,7 +138,7 @@ public final class Constants {
             // Bezels left
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(31.90);
             // Bezels right
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-150.29);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-147.39);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -179,5 +182,13 @@ public final class Constants {
 
     public static final class AcquisitionConstants {
         public static final double floorIntakeRPM = 1500;
+    }
+
+    public static final class VisionConstants {
+        // Physical location of the camera on the robot relative to center of bot.
+        public static final Transform3d cameraToRobot = new Transform3d(
+            new Translation3d(Units.inchesToMeters(-10.5), 0, 0), 
+            new Rotation3d(0,Units.degreesToRadians(35),Math.PI));
+        public static final Transform3d robotToCamera = cameraToRobot.inverse();
     }
 }

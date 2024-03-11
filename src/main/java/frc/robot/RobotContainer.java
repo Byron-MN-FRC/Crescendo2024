@@ -91,7 +91,7 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver.getHID(), XboxController.Button.kX.value);
 
   /* Subsystems */
-  private final Swerve s_Swerve = new Swerve();
+  public final Swerve s_Swerve = new Swerve();
   public final Acquisition m_acquisition = new Acquisition();
   public final Climb m_climb = new Climb();
   public final Spamp m_spamp = new Spamp();
@@ -242,8 +242,8 @@ public class RobotContainer {
     accessory.leftTrigger(0.5)
         .whileTrue(new RunClimb(m_climb));
 
-    SmartDashboard.putData("Pathfind Center Field", AutoBuilder.pathfindToPose(
-      new Pose2d(6.0, 0.0, Rotation2d.fromDegrees(0)), 
+    SmartDashboard.putData("Pathfind to scoring pos", AutoBuilder.pathfindToPose(
+      new Pose2d(2.15, 3.0, Rotation2d.fromDegrees(180)), 
       new PathConstraints(
         2.0, 2.0, 
         Units.degreesToRadians(360), Units.degreesToRadians(540)

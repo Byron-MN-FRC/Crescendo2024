@@ -20,6 +20,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -121,11 +122,10 @@ public class DriveToTag extends Command {
                     !robotCentricSupplier.getAsBoolean(),
                     true);
         } else {
-
+            SmartDashboard.putNumber("rotatepower", Vision.getInstance().GetTargetRotPower());
             m_swerve.drive(
-                    new Translation2d(xTargetVector,
-                            -yTargetVector).times(Constants.Swerve.maxSpeed),
-                    turnPower * Constants.Swerve.maxAngularVelocity,
+                    new Translation2d(-xTargetVector, yTargetVector).times(Constants.Swerve.maxSpeed),
+                    Vision.getInstance().GetTargetRotPower() * Constants.Swerve.maxAngularVelocity,
                     !robotCentricSupplier.getAsBoolean(),
                     true);
         }

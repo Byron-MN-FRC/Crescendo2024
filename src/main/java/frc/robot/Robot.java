@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     // public PneumaticHub ph = new PneumaticHub(20);
     Compressor compressor = new Compressor(20, PneumaticsModuleType.REVPH);
 
-     private PowerDistribution pdp = new PowerDistribution(20, ModuleType.kCTRE);
+     private PowerDistribution pdp = new PowerDistribution(20, ModuleType.kRev);
 
 
     /**

@@ -41,7 +41,7 @@ public class TeleopSwerve extends Command {
         rotationVal = rotationVal*speedAdjustment;
         strafeVal = strafeVal*speedAdjustment;
 
-         System.out.println("adjustment=" +speedAdjustment + " translational=" +translationVal + "rotational=" +rotationVal + "strafe=" +strafeVal);
+        //System.out.println("adjustment=" +speedAdjustment + " translational=" +translationVal + "rotational=" +rotationVal + "strafe=" +strafeVal);
 
         /* Drive */
         s_Swerve.drive(
