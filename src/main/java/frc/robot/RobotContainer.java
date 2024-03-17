@@ -39,6 +39,7 @@ import frc.robot.commands.ActivateIntake;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.ClearIntake;
 import frc.robot.commands.DriveToTag;
+import frc.robot.commands.LineUpToTag;
 import frc.robot.commands.ResetState;
 import frc.robot.commands.RetractIntake;
 import frc.robot.commands.RunClimb;
@@ -95,7 +96,7 @@ public class RobotContainer {
   public final Acquisition m_acquisition = new Acquisition();
   public final Climb m_climb = new Climb();
   public final Spamp m_spamp = new Spamp();
-  public final Vision m_final = new Vision();
+  public final Vision m_vision = new Vision();
   public PneumaticHub ph = new PneumaticHub(20);
 
   /* Path Planner */
@@ -225,12 +226,14 @@ public class RobotContainer {
   
     final JoystickButton btnDriveToTag = new JoystickButton(driver.getHID(),
         XboxController.Button.kA.value);
-    btnDriveToTag.whileTrue(new DriveToTag(
-            s_Swerve, 
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> false
+    // btnDriveToTag.whileTrue(new DriveToTag(
+    //         s_Swerve, 
+    //         () -> -driver.getRawAxis(translationAxis),
+    //         () -> -driver.getRawAxis(strafeAxis),
+    //         () -> -driver.getRawAxis(rotationAxis),
+    //         () -> false
+    // ).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+        btnDriveToTag.whileTrue(new LineUpToTag(s_Swerve,s_Swerve::getPose
     ).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
   
     /* Accessory Buttons */

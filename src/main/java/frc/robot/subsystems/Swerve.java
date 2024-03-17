@@ -213,4 +213,8 @@ public class Swerve extends SubsystemBase {
     public void stopMonitoring() {
         hourGlAnalog.setVoltage(0);
     }
+
+    public void stop() {
+         driveRobotRelative(new ChassisSpeeds());
+    }
 }
