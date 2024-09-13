@@ -18,6 +18,8 @@ public final class Constants {
     public static final class Swerve {
         public static final int pigeonID = 8;
 
+        public static final String CANivore1 = "CANivore1";
+
         public static final COTSTalonFXSwerveConstants chosenModule = 
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
@@ -96,9 +98,10 @@ public final class Constants {
             // Bezels left
             //public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-78.22);
             // Bezels right
+            public static final String canBusID = CANivore1;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(103.01);
             public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
 
         /* Front Right Module - Module 1 */
@@ -109,9 +112,10 @@ public final class Constants {
             // Bezels left
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-174.46); 
             // Bezels right
+            public static final String canBusID = CANivore1;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(8.96); 
              public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
         
         /* Back Left Module - Module 2 */
@@ -122,9 +126,10 @@ public final class Constants {
             // Bezels left
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.98);
             // Bezels right
+            public static final String canBusID = CANivore1;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-144.31);
             public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
@@ -135,9 +140,10 @@ public final class Constants {
             // Bezels left
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(31.90);
             // Bezels right
+            public static final String canBusID = CANivore1;
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-150.29);
             public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
         //      public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
         //   new PIDConstants(5.0, 0, 0), // Translation constants 
