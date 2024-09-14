@@ -7,6 +7,9 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,11 +29,13 @@ import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
+
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     private AnalogOutput hourGlAnalog = new AnalogOutput(0);
     public boolean invert = false;
     private double isSlow = 1;
+    private final SwerveDrivePoseEstimator m_PoseEstimator;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.CANivore1);
@@ -44,6 +50,12 @@ public class Swerve extends SubsystemBase {
         };
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+
+        m_PoseEstimator = new SwerveDrivePoseEstimator(
+                Constants.Swerve.swerveKinematics,
+                gyro.getRotation2d(),
+                getModulePositions(),
+                new Pose2d());
 
         // configure auto builder
         AutoBuilder.configureHolonomic(
@@ -89,8 +101,10 @@ public class Swerve extends SubsystemBase {
         } else {
             startMonitoring();
         }
-        if (isAllianceFlip() == true) invert = true;
-        else invert = false;
+        if (isAllianceFlip() == true)
+            invert = true;
+        else
+            invert = false;
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         // translation.getX() * isSlow,
@@ -136,11 +150,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return m_PoseEstimator.getEstimatedPosition();
     }
 
     public void setPose(Pose2d pose) {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        m_PoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
     public Rotation2d getHeading() {
@@ -148,12 +162,12 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setHeading(Rotation2d heading) {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
+        m_PoseEstimator.resetPosition(getGyroYaw(), getModulePositions(),
                 new Pose2d(getPose().getTranslation(), heading));
     }
 
     public void zeroHeading() {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
+        m_PoseEstimator.resetPosition(getGyroYaw(), getModulePositions(),
                 new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
@@ -169,7 +183,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveOdometry.update(getGyroYaw(), getModulePositions());
+        m_PoseEstimator.update(getGyroYaw(), getModulePositions());
 
         for (SwerveModule mod : mSwerveMods) {
             // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder",
@@ -209,6 +223,17 @@ public class Swerve extends SubsystemBase {
 
     public void stop() {
         driveRobotRelative(new ChassisSpeeds());
+    }
+    // add standard deviation constants
+    //finish constructer
+    //tune deviation
+    
+    public Vector<N3> createStateStdDevs(double x, double y, double theta) {
+        return VecBuilder.fill(x, y, Units.degreesToRadians(theta));
+    }
+
+    public Vector<N3> createVisionMeasurementStdDevs(double x, double y, double theta) {
+        return VecBuilder.fill(x, y, Units.degreesToRadians(theta));
     }
 
 }
