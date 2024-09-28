@@ -33,6 +33,7 @@ import frc.robot.autos.exampleAuto;
 import frc.robot.commands.ActivateIntake;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.ClearIntake;
+import frc.robot.commands.ClearSpampAmp;
 import frc.robot.commands.LineUpToTag;
 import frc.robot.commands.RetractIntake;
 import frc.robot.commands.RunClimb;
@@ -230,6 +231,9 @@ public class RobotContainer {
     /* Accessory Buttons */
     final JoystickButton btnClearIntake = new JoystickButton(accessory.getHID(), XboxController.Button.kA.value);
     btnClearIntake.whileTrue(new ClearIntake(m_acquisition).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+    // final JoystickButton btnClearSpampAmp = new JoystickButton(accessory.getHID(), XboxController.Button.kX.value);
+    // btnClearSpampAmp.whileTrue(new ClearSpampAmp(m_spamp).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
     resetState.onTrue(new InstantCommand(() -> m_spamp.resetState()));
 

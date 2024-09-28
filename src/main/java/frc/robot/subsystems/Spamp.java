@@ -193,6 +193,13 @@ public class Spamp extends SubsystemBase {
 
     }
 
+    public void ClearSpampAmp() {
+        bottomLeft.set(-.25);
+        midLeft.set(-.5);
+        topRight.set(-.25);
+        RobotContainer.getInstance().m_acquisition.runIntakeOut();
+    }
+
     public void runTopShooter() {
         topLeft.set(Constants.SpampConstants.speakerRPM / Constants.MaxRPMConstants.maxRPMVortex);
         topRight.set(-Constants.SpampConstants.speakerRPM / Constants.MaxRPMConstants.maxRPMVortex);
@@ -233,9 +240,5 @@ public class Spamp extends SubsystemBase {
         RobotContainer.getInstance().m_acquisition.stopBoth();
     }
 
-    // public void logSpeeds() {
-    //     SmartDashboard.putNumber("TopLeft", topLeft.getEncoder().getVelocity());
-    //     SmartDashboard.putNumber("TopRight", topRight.getEncoder().getVelocity());
 
-    // }
 }

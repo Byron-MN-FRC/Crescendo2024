@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Spamp;
@@ -8,6 +9,7 @@ import frc.robot.subsystems.Spamp;
 public class autonShoot extends Command {
     private final Spamp m_spamp;
     private final Timer m_time = new Timer();
+
 
     public autonShoot(Spamp subsystem) {
         m_spamp = subsystem;
@@ -38,7 +40,6 @@ public class autonShoot extends Command {
             m_spamp.shootSpeaker();
           } else {
             m_spamp.runTopShooter();
-            // m_spamp.logSpeeds();
           }
     }
 
@@ -54,7 +55,7 @@ public class autonShoot extends Command {
     public boolean isFinished() {
         // return !m_spamp.isNoteLeavingSpamp() && !m_spamp.isNoteInSpamp()
         //         && !RobotContainer.getInstance().m_acquisition.isNoteInAcquisition();
-        return m_spamp.isDoneShooting() && m_time.hasElapsed(1.5); 
+        return m_spamp.isDoneShooting() && m_time.hasElapsed(1.3); 
 
     }
 
