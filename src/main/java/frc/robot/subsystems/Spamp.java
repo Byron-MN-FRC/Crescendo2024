@@ -81,7 +81,7 @@ public class Spamp extends SubsystemBase {
         midLeft.setIdleMode(IdleMode.kBrake);
         midLeft.burnFlash();
 
-        topLeft = new CANSparkFlex(28,MotorType.kBrushless);
+        topLeft = new CANSparkFlex(28, MotorType.kBrushless);
 
         topLeft.setInverted(false);
         topLeft.setIdleMode(IdleMode.kBrake);
@@ -89,8 +89,8 @@ public class Spamp extends SubsystemBase {
 
         noteDetectorSpampBottom = new DigitalInput(2);
         addChild("noteDetectorSpampBottom", noteDetectorSpampBottom);
-        
-         shootSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 15, 14);
+
+        shootSolenoid = new DoubleSolenoid(20, PneumaticsModuleType.REVPH, 15, 14);
         addChild("shootSolenoid", shootSolenoid);
 
         noteDetectorSpampTop = new DigitalInput(3);
@@ -171,7 +171,6 @@ public class Spamp extends SubsystemBase {
         }
     }
 
-
     public void deployShooter() {
         shootSolenoid.set(Value.kForward);
     }
@@ -183,7 +182,7 @@ public class Spamp extends SubsystemBase {
     public void runTopAmp() {
         topRight.set(Constants.SpampConstants.topRightAmpRPM / Constants.MaxRPMConstants.maxRPMVortex); // .25
         midLeft.set(Constants.SpampConstants.midLeftAmpRPM / Constants.MaxRPMConstants.maxRPMNeo); // .17
-        bottomLeft.set(.2);        
+        bottomLeft.set(.2);
         RobotContainer.getInstance().m_acquisition.runBoth();
     }
 
@@ -215,8 +214,7 @@ public class Spamp extends SubsystemBase {
             topRight.set(-Constants.SpampConstants.speakerRPM / Constants.MaxRPMConstants.maxRPMVortex);
             RobotContainer.getInstance().m_acquisition.runBoth();
 
-        }
-        else {
+        } else {
             shootSpeaker();
         }
     }
@@ -227,11 +225,17 @@ public class Spamp extends SubsystemBase {
         bottomLeft.set(.2);
     }
 
-    public void resetState(){
+    public void resetState() {
         transferring = false;
         retractShooter();
         RobotContainer.getInstance().m_acquisition.retractIntake();
         stopall();
         RobotContainer.getInstance().m_acquisition.stopBoth();
     }
+
+    // public void logSpeeds() {
+    //     SmartDashboard.putNumber("TopLeft", topLeft.getEncoder().getVelocity());
+    //     SmartDashboard.putNumber("TopRight", topRight.getEncoder().getVelocity());
+
+    // }
 }
