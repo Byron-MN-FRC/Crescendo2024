@@ -34,7 +34,7 @@ public class autonShoot extends Command {
         //     m_spamp.speakerAutonShoot();
         // }
         
-        if (m_time.get() > 1.4){
+        if (m_time.get() > 1.1){
             m_spamp.shootSpeaker();
           } else {
             m_spamp.runTopShooter();
