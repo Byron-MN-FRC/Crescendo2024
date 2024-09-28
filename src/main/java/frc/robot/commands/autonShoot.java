@@ -38,6 +38,7 @@ public class autonShoot extends Command {
             m_spamp.shootSpeaker();
           } else {
             m_spamp.runTopShooter();
+            // m_spamp.logSpeeds();
           }
     }
 
