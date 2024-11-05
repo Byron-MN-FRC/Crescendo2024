@@ -1,0 +1,62 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.33,
+      "y": 5.57
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Start2Amp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonAmpCommand"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp2Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonSpamIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note2Speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "autonShootCommand"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
